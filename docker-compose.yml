@@ -9,12 +9,16 @@ services:
       - GRID_BROWSER_TIMEOUT=60
   chrome:
     image: selenium/node-chrome:3.141
+    ports:
+      - 5900:5900
     depends_on:
       - selenium-hub
     environment:
       - HUB_PORT_4444_TCP_ADDR=selenium-hub
       - HUB_PORT_4444_TCP_PORT=4444
   test:
-    image: test:latest
+    build: .
     depends_on:
       - chrome
+    environment:
+      - HUB_ENDPOINT=selenium-hub:4444
